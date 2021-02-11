@@ -1,0 +1,33 @@
+name: Test Go Project
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: copy google-application-credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: echo $GOOGLE_APPLICATION_CREDENTIALS | base64 --decode --ignore-garbage > ./firebase_adminsdk.json
+
+      - name: export google-application-credentials
+        run: export GOOGLE_APPLICATION_CREDENTIALS=./firebase_adminsdk.json
+
+      # https://qiita.com/x-color/items/f60025c20a547a7355b5
+      - name: Set up Go 1.15
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.15
+
+      - name: Check out code into the go module directory
+        uses: actions/checkout@v1
+
+      - name: Get dependencies
+        run: go get -v -t -d ./...
+
+      - name: Test code
+        run: go test -v ./...
