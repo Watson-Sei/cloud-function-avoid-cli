@@ -16,7 +16,13 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
+	firebase "firebase.google.com/go"
+	"firebase.google.com/go/auth"
 	"github.com/spf13/cobra"
+	"google.golang.org/api/option"
+	"log"
+	"os"
 )
 
 //newShowCmd returns cobra.Command instance for show sub-command
@@ -26,29 +32,53 @@ func newClaimsCmd() *cobra.Command {
 		Short: "Short comment for show sub-command",
 		Long:  "Long comment for show sub-command",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			i, err := cmd.Flags().GetInt("integer")
+			set, err := cmd.Flags().GetBool("customClaimsSet")
 			if err != nil {
 				return err
 			}
-			b, err := cmd.Flags().GetBool("boolean")
-			if err != nil {
-				return err
-			}
-			s, err := cmd.Flags().GetString("string")
-			if err != nil {
-				return err
-			}
-			cui.Outputln("Integer option value:", i)
-			cui.Outputln(" String option value:", s)
-			cui.Outputln("Boolean option value:", b)
+			if set {
+				uid, err := cmd.Flags().GetString("uid")
+				if err != nil {
+					return err
+				}
 
-			return nil
+				ctx := context.Background()
+
+				opt := option.WithCredentialsFile(os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+				app, err := firebase.NewApp(context.Background(), nil, opt)
+				if err != nil {
+					log.Printf("error initializing app: %v", err)
+					return err
+				}
+
+				client, err := app.Auth(ctx)
+				if err != nil {
+					log.Fatalf("error getting Auth client: %v\n", err)
+					return err
+				}
+
+				if err = customClaimsSet(ctx, client, uid); err != nil {
+					return err
+				}
+
+				cui.Outputln("Custom Claims Set Up")
+			}
+			return err
 		},
 	}
-
-	claimsCmd.Flags().IntP("integer", "i", 0, "integer option")
-	claimsCmd.Flags().BoolP("boolean", "b", false, "boolean option")
-	claimsCmd.Flags().StringP("string", "s", "", "string option")
+	// Note: https://github.com/spf13/pflag/blob/master/flag.go#L362
+	claimsCmd.Flags().BoolP("customClaimsSet", "s", false, "Identify Custom Claims command processing.")
+	claimsCmd.Flags().StringP("uid", "u", "", "The uid of the user you want to make an Admin.")
 
 	return claimsCmd
+}
+
+func customClaimsSet(ctx context.Context, client *auth.Client, uid string) error {
+	claims := map[string]interface{}{"admin": true}
+	err := client.SetCustomUserClaims(ctx, uid, claims)
+	if err != nil {
+		log.Fatalf("error setting custom claims %v\n", err)
+		return err
+	}
+	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/spiegel-im-spiegel/gocli/exitcode"
 	"github.com/spiegel-im-spiegel/gocli/rwi"
+	"os"
 	"testing"
 )
 
@@ -12,7 +13,7 @@ func TestClaims(t *testing.T)  {
 		args []string
 		want string
 	}{
-		{args: []string{"claims", "-i", "123", "-s", "日本語", "-b"}, want: "Integer option value: 123\n String option value: 日本語\nBoolean option value: true\n"},
+		{args: []string{"claims", "-s", "-u", os.Getenv("uid")}, want: "Custom Claims Set Up\n"},
 	}
 
 	for _, c := range testCase {
