@@ -5,6 +5,19 @@ Avoid Cloud Functions and continue to use Firebase projects for free.  (fantasy.
 ## Github Actions
 > [How to use Github Actions?](https://developer.yukimonkey.com/article/20200422/)
 
+### Local Github Actions
+> Install
+> ```shell
+> brew install nektos/tap/act
+> ```
+> 
+> Run
+> ```shell
+> act push --secret-file .secrets
+> ```
+> 
+> 
+
 ## Golang Cobra Cli 
 > [Cobraの使い方とテスト](https://text.baldanders.info/golang/using-and-testing-cobra/)
 > 

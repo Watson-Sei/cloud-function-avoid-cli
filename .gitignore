@@ -18,3 +18,5 @@ firebase_adminsdk.json
 
 .DS_Store
 .idea
+
+.secrets
