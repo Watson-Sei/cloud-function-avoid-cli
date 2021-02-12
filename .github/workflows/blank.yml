@@ -31,4 +31,4 @@ jobs:
       - name: Test Code
         env:
           uid: ${{ secrets.UID }}
-        run: export GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json) && CGO_ENABLED=0 GOOS=linux go test -v ./cmd
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json) && CGO_ENABLED=0 GOOS=linux go test -v ./...
