@@ -13,7 +13,7 @@ func TestClaims(t *testing.T)  {
 		args []string
 		want string
 	}{
-		{args: []string{"claims", "-s", "-u", os.Getenv("uid")}, want: "Custom Claims Set Up\n"},
+		{args: []string{"claims", "-s", "-u", os.Getenv("UID")}, want: "Custom Claims Set Up\n"},
 	}
 
 	for _, c := range testCase {
