@@ -35,4 +35,6 @@ jobs:
         env:
           UID: ${{ secrets.UID }}
         run: |
+          echo $GOOGLE_APPLICATION_CREDENTIALS
+          cat $GOOGLE_APPLICATION_CREDENTIALS
           CGO_ENABLED=0 GOOS=linux go test -v ./...
