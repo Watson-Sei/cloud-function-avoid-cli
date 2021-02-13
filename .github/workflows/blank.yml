@@ -28,13 +28,13 @@ jobs:
       - name: Check Firebase_adminsdk path
         run: echo $(find `pwd` -name firebase_adminsdk.json)
 
-      - name: Test Code
-        run: |
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json)" >> $GITHUB_ENV
+      - name: Export Google
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json)
+
       - name: Check Env
         env:
           UID: ${{ secrets.UID }}
         run: |
-          echo $GOOGLE_APPLICATION_CREDENTIALS
-          cat $GOOGLE_APPLICATION_CREDENTIALS
+          export GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json)
           CGO_ENABLED=0 GOOS=linux go test -v ./...
+          echo $GOOGLE_APPLICATION_CREDENTIALS
