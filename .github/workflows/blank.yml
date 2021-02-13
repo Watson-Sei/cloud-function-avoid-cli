@@ -12,7 +12,7 @@ jobs:
       - name: copy google-application-credentials
         env:
           GOOGLE_APPLICATION_CREDENTIALS_SECRET: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        run: echo $GOOGLE_APPLICATION_CREDENTIALS_SECRET | base64 --decode --ignore-garbage > ./firebase_adminsdk.json
+        run: echo $GOOGLE_APPLICATION_CREDENTIALS_SECRET | base64 --decode --ignore-garbage > /tmp/google-application-credentials
 
       - name: Set up Go 1.15
         uses: actions/setup-go@v1
@@ -25,16 +25,9 @@ jobs:
       - name: Get dependencies
         run: go get -v -t -d ./...
 
-      - name: Check Firebase_adminsdk path
-        run: echo $(find `pwd` -name firebase_adminsdk.json)
-
-      - name: Export Google
-        run: export GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json)
-
       - name: Check Env
         env:
           UID: ${{ secrets.UID }}
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/google-application-credentials
         run: |
-          export GOOGLE_APPLICATION_CREDENTIALS=$(find `pwd` -name firebase_adminsdk.json)
           CGO_ENABLED=0 GOOS=linux go test -v ./...
-          echo $GOOGLE_APPLICATION_CREDENTIALS
