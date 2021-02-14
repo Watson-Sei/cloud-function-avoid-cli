@@ -1,6 +1,10 @@
 # cloud-function-avoid-cli
 Avoid Cloud Functions and continue to use Firebase projects for free.  (fantasy...)
 
+# Install Cli tools
+```shell script
+go get -u github.com/Watson-Sei/cloud-function-avoid-cli
+```
 
 ## Github Actions
 > [How to use Github Actions?](https://developer.yukimonkey.com/article/20200422/)
@@ -15,8 +19,7 @@ Avoid Cloud Functions and continue to use Firebase projects for free.  (fantasy.
 > ```shell
 > act push --secret-file .secrets
 > ```
-> 
-> 
+
 
 ## Golang Cobra Cli 
 > [Cobraの使い方とテスト](https://text.baldanders.info/golang/using-and-testing-cobra/)
